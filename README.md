@@ -19,12 +19,13 @@ and it would tap the data0 and data1 lines.
 Seperately I have been playing around with the ESP8266-12 and node-mcu cards and realized
 the possiblities of using that platform to buld this on.
 
-Then I went to ShmooCon 2017, where gentleman (who's name I don;t recall, so I'll refer 
-to him as a gentleman), preented the ESPKey.  Just goes to prove every idea I come up with
+Then I went to ShmooCon 2017, where gentleman (who's name I don't recall, so I'll refer 
+to him as a gentleman), presented the ESPKey.  Just goes to prove every idea I come up with
 someone else does too.  If I heard him right he plans to sell his for $100.  Its like $10 parts
 and a little bit of code.  So I'm not doing this to steal from him, but rather just build it and
 allow anyone else with enough skill to do so for much cheaper than $100.  I'm not selling these,
-so if you want to buy one, search for ESP Key.
+so if you want to buy one, search for ESP Key.  If you are doing physical penetration assesments 
+it's a great tool to have in your bag.
 
 I want to reconoginize the gentleman that poke about the ESPKey, since he did so before I built this.
 He deserves a lot of credit for building it and talking about it.  Also I want to thank the guys at
