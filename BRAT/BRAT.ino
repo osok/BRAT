@@ -1,5 +1,5 @@
 /**
- * CRAP-Tap.ino - Card Reader Accesspoint Passive - Tap is designed to
+ * BRAT.ino - Badge Reader Active Tap - is designed to
  *                connect to the Data0 & Data1 lines inside of a Wiegand
  *                based card reader.  It will store the card data on the 
  *                file system of an ESP8266-12.  the device also sets up
