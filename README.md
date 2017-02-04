@@ -27,6 +27,8 @@ allow anyone else with enough skill to do so for much cheaper than $100.  I'm no
 so if you want to buy one, search for ESP Key.  If you are doing physical penetration assesments 
 it's a great tool to have in your bag.
 
-I want to reconoginize the gentleman that poke about the ESPKey, since he did so before I built this.
-He deserves a lot of credit for building it and talking about it.  Also I want to thank the guys at
-Bishop Fox for the Tastic.  I am using their code base as a refierece for the Wiegand protocol.
+I want to reconoginize the gentleman that spoke about the ESPKey, since he did so before I built this.
+He deserves a lot of credit for building it and talking about it.  Also, I want to thank the guys at
+Bishop Fox for the Tastic.  I am using their code base as a refierece for the eading of the Wiegand protocol.
+
+
