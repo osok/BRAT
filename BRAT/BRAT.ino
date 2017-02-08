@@ -58,20 +58,24 @@ volatile unsigned long cardChunk2 = 0;
  * These variables are for the writing of the 
  * Bits to the bade reader 
  */
- 
-#define SHORT_TIME 7  // 50 microseconds
-//#define LONG_TIME 166 // 1 millisecond
-#define LONG_TIME 151 // 1 millisecond (minus overhead for wire writes)
+////These were based on timming from ebuging code
+//#define SHORT_TIME 7  // 50 microseconds
+////#define LONG_TIME 166 // 1 millisecond
+//#define LONG_TIME 151 // 1 millisecond (minus overhead for wire writes)
+//
+// These are based on timing as seen by a logic analyzer
+#define SHORT_TIME 655  // 50 microseconds
+#define LONG_TIME 27146 // 1 millisecond (Takes into account over head other than the delay loop)
+//#define LONG_TIME 16000 // 
 
-#define BIT_SET_1_STARTBIT 22
-#define BIT_SET_2_STARTBIT 11
+int bitcnt1;
+int bitcnt2;
 
 unsigned long startTime;
-unsigned long shortTime[50];
-unsigned long instructionTime[50];
-unsigned long longTime[50];
-boolean isAOne[50];
-boolean bitUsed[50];
+unsigned long shortTime[80];
+unsigned long longTime[80];
+boolean isAOne[80];
+boolean bitUsed[80];
 int bitCountToWrite;
 unsigned long endTime;
 
@@ -90,9 +94,11 @@ void ISR_INT0()
   
   if(bitCount < 23) {
       bitHolder1 = bitHolder1 << 1;
+      bitcnt1++;
   }
   else {
       bitHolder2 = bitHolder2 << 1;
+      bitcnt2++;
   }
     
   weigand_counter = WEIGAND_WAIT_TIME;  
@@ -110,10 +116,12 @@ void ISR_INT1()
    if(bitCount < 23) {
       bitHolder1 = bitHolder1 << 1;
       bitHolder1 |= 1;
+      bitcnt1++;
    }
    else {
      bitHolder2 = bitHolder2 << 1;
      bitHolder2 |= 1;
+      bitcnt2++;
    }
   
   weigand_counter = WEIGAND_WAIT_TIME;  
@@ -162,25 +170,42 @@ void handleClear() {
 }
 
 void handleAccess() {
-  unsigned long bitbuf1 = atol(server.arg("a").c_str());
-  unsigned long  bitbuf2 = atol(server.arg("b").c_str());
-  Serial.print("a=");
+  unsigned long bitbuf1 = atol(server.arg("byte1").c_str());
+  unsigned long  bitbuf2 = atol(server.arg("byte2").c_str());
+  int bCnt1 = atol(server.arg("bitcnt1").c_str());
+  int bCnt2 = atol(server.arg("bitcnt2").c_str());
+  Serial.print("byte1=");
   Serial.println(bitbuf1);
-  Serial.print("b=");
+  Serial.print("byte2=");
   Serial.println(bitbuf2);
-  sendBadgeBits(bitbuf1,bitbuf2);
-  printTimes();
+  Serial.print("bits1=");
+  Serial.println(bitbuf1,BIN);
+  Serial.print("bits2=");
+  Serial.println(bitbuf2, BIN);
+  Serial.print("bCnt1=");
+  Serial.println(bCnt1);
+  Serial.print("bCnt2=");
+  Serial.println(bCnt2);
+
+   
+  sendBadgeBits(bitbuf1,bitbuf2,bCnt1,bCnt2 );
+  //printTimes();
   handleView();
 }
 
 void handleView() {
+  //This is seperate in order to add eventual formatting around the card page
   server.send(200, "text/html", "<html><body><iframe src=\"/card\" frameborder=\"0\" scrolling=\"no\" width=\"100%\" height=\"100%\"></html>");
 }
 
 void setupForRFIDRead(){
+//  digitalWrite(DATA0, LOW);
+//  digitalWrite(DATA1, LOW);
+  
   pinMode(DATA0, INPUT_PULLUP);     // DATA0 (INT0)
   pinMode(DATA1, INPUT_PULLUP);     // DATA1 (INT1)
-  
+
+  delay(500);
   // binds the ISR functions to the falling edge of INTO and INT1
   attachInterrupt(digitalPinToInterrupt(DATA0), ISR_INT0, FALLING);  
   attachInterrupt(digitalPinToInterrupt(DATA1), ISR_INT1, FALLING);
@@ -195,6 +220,7 @@ void setupForRFIDWrite(){
   digitalWrite(DATA0, HIGH);
   digitalWrite(DATA1, HIGH);
 
+  delay(500);
   // Turn the the Int while we write
   detachInterrupt(digitalPinToInterrupt(DATA0));  
   detachInterrupt(digitalPinToInterrupt(DATA1));
@@ -247,9 +273,6 @@ void loop() {
   yield();
 //  ArduinoOTA.handle();
 //  yield();
-
-//  Serial.println("....");
-//  yield();
   
   // This waits to make sure that there have been no more data pulses before processing data
   if (!flagDone) {
@@ -261,6 +284,11 @@ void loop() {
   
   // if we have bits and we the weigand counter went out
   if (bitCount > 0 && flagDone) {
+    Serial.print("Bitcount 1 = ");
+    Serial.println(bitcnt1);
+    Serial.print("Bitcount 2 = ");
+    Serial.println(bitcnt2);
+    
     unsigned char i;
     
     getCardValues();
@@ -278,6 +306,9 @@ void loop() {
      {
        databits[i] = 0;
      }
+
+     bitcnt1 = 0;
+     bitcnt2 = 0;
   }  
 }
 void printBits(){
@@ -634,7 +665,7 @@ void getCardValues() {
 /**
  * Used to write the stored badge bits to the wire 
  */
-void sendBadgeBits(unsigned long bits1,unsigned long bits2){
+void sendBadgeBits(unsigned long bits1,unsigned long bits2, int bCnt1, int bCnt2){
   setupForRFIDWrite();
   startTime = ESP.getCycleCount(); 
   unsigned long test = 0;
@@ -644,42 +675,50 @@ void sendBadgeBits(unsigned long bits1,unsigned long bits2){
   
 //  Setting up the first set of bits
 //  Serial.println(bits1, BIN);
-  for(int i=BIT_SET_1_STARTBIT;i >= 0; i--){
-    if(i>23){
+ 
+  for(int i=bCnt1-1;i >= 0; i--){
+    if(i>23 ){
       shiftedBits = bits1 >> 24;
       adjustment = 24;
-    }else if(i>15){
+    }else if(i>15 ){
       shiftedBits = bits1 >> 16;
       adjustment = 16;
-    }else if(i>7){
+    }else if(i>7 ){
       shiftedBits = bits1 >> 8;
       adjustment = 8;
-    }else{
+    }else {
       shiftedBits = bits1;
       adjustment = 0;
     }
     
     bitCountToWrite++;
-    bitUsed[i+BIT_SET_2_STARTBIT] = true;
+    bitUsed[i+bCnt2] = true;
     test = 0;
-    test = 1UL << i-adjustment;
+    test = 1UL << (i-adjustment);
+//    Serial.print("adjustment = ");
+//    Serial.println(adjustment);
+//    Serial.print("Test = ");
 //    Serial.println(test, BIN);
-    isAOne[i+BIT_SET_2_STARTBIT] = (shiftedBits & test);
-//    Serial.println(isAOne[i+BIT_SET_2_STARTBIT]);
+    isAOne[i+bCnt2] = (shiftedBits & test);
+    
+//    Serial.print("Index = ");
+//    Serial.println((i+bCnt2));
+//    Serial.print("Bit = ");
+//    Serial.println(isAOne[i+bCnt2]?"1":"0");
   }
 
 //  Setting up the second set of bits
-  for(int i=BIT_SET_2_STARTBIT;i >= 0; i--){
-     if(i>23){
-      shiftedBits = bits1 >> 24;
+  for(int i=bCnt2-1;i >= 0; i--){
+     if(i>23 ){
+      shiftedBits = bits2 >> 24;
       adjustment = 24;
-    }else if(i>15){
+    }else if(i>15 ){
       shiftedBits = bits2 >> 16;
       adjustment = 16;
-    }else if(i>7){
+    }else if(i>7 ){
       shiftedBits = bits2 >> 8;
       adjustment = 8;
-    }else{
+    }else {
       shiftedBits = bits2;
       adjustment = 0;
     }
@@ -687,12 +726,21 @@ void sendBadgeBits(unsigned long bits1,unsigned long bits2){
     bitCountToWrite++;
     bitUsed[i] = true;
     test = 0;
-    test = 1UL << i-adjustment;
+    test = 1UL << (i-adjustment);
+//    Serial.print("adjustment = ");
+//    Serial.println(adjustment);
+//    Serial.print("Test = ");
 //    Serial.println(test, BIN);
     isAOne[i] = (shiftedBits & test);
-//    Serial.println(isAOne[i]);
+//    Serial.print("Index = ");
+//    Serial.println(i);
+//    Serial.print("Bit = ");
+//    Serial.println(isAOne[i]?"1":"0");
   }
 
+
+//  Serial.print("bitCountToWrite = ");
+//  Serial.println(bitCountToWrite);
 
 /**
  * This is where the pulses are sent out
@@ -714,7 +762,6 @@ void sendBadgeBits(unsigned long bits1,unsigned long bits2){
     }
     digitalWrite((isAOne[i]?DATA1:DATA0), HIGH);
     shortTime[i] = ESP.getCycleCount();
-//    instructionTime[i] = ESP.getCycleCount();
     
     for(long a=0;a<LONG_TIME;a++){
        ESP.getCycleCount();
@@ -747,8 +794,6 @@ void printTimes(){
   Serial.println("");
   Serial.print("Initial loop and first pass = ");
   Serial.println( (shortTime[0]-startTime) );
-  Serial.print("instruction time = ");
-  Serial.println( (instructionTime[0]-shortTime[0]) );
   Serial.print("delay = ");
   Serial.println( (longTime[0]-shortTime[0]) );
 
@@ -781,10 +826,14 @@ void writeData(){
     // so you have to close this one before opening another.
     File file = SPIFFS.open(dataFile, "a");
     if(bitCount > 20){
-      file.print("<a href=\"/access?a=");
+      file.print("<a href=\"/access?byte1=");
       file.print(bitHolder1);  
-      file.print("&b=");
+      file.print("&bitcnt1=");
+      file.print(bitcnt1);  
+      file.print("&byte2=");
       file.print(bitHolder2);  
+      file.print("&bitcnt2=");
+      file.print(bitcnt2);  
       file.print("\">");
       file.print(cardChunk1, HEX);  
       file.print(cardChunk2, HEX);  
