@@ -29,6 +29,20 @@ it's a great tool to have in your bag.
 
 I want to reconoginize the gentleman that spoke about the ESPKey, since he did so before I built this.
 He deserves a lot of credit for building it and talking about it.  Also, I want to thank the guys at
-Bishop Fox for the Tastic.  I am using their code base as a refierece for the eading of the Wiegand protocol.
+Bishop Fox for the Tastic.  I am using their code base as a refierece for the eading of the Wiegand 
+protocol.
+
+I have finally pulled this together a little more.  I got the code working a few weeks ago.  
+I had a problem with the replay.  I got hung up on how the ESP Key was demo'd at ShmooCon.  He spliced the four
+wires +18V / GND / Data0 / Data1.  There was no cutting of the wires, just punched them down.   
+As it turns out the readers hold the Data0 and Data1 at +5V (High).
+There is No way to replay the bits that are collected from those wires back to those wires.  There is a
+port conflict.  So to fix that I had to read in on one set of GPIO Pins and write out to another.  As well
+the ESP is only capable of 3.3V Logic levels, so a converted had to be used to get the signal to the correct
+levels.
+
+As of 2/17/17 I still need to design the circuit which allows the device to be implanted inline with the 
+badge reader.  Once I have a circuit that works on a locally created board, I'll design a board for faberication
+and send it off to OSKPark.  I'll be sure to post the eagle designs here as well. 
 
 

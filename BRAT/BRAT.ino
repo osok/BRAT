@@ -51,8 +51,11 @@ volatile unsigned long bitHolder2 = 0;
 volatile unsigned long cardChunk1 = 0;
 volatile unsigned long cardChunk2 = 0;
 
-#define DATA0 4
-#define DATA1 0
+
+#define DATA0_IN 4
+#define DATA1_IN 0
+#define DATA0_OUT 14
+#define DATA1_OUT 12
 
 /**
  * These variables are for the writing of the 
@@ -80,7 +83,7 @@ int bitCountToWrite;
 unsigned long endTime;
 
 
-
+boolean isWriting = false;
 
 ///////////////////////////////////////////////////////
 // Process interrupts
@@ -88,43 +91,46 @@ unsigned long endTime;
 // interrupt that happens when INTO goes low (0 bit)
 void ISR_INT0()
 {
+ if(!isWriting){
 //  Serial.print("0");
-  bitCount++;
-  flagDone = 0;
-  
-  if(bitCount < 23) {
-      bitHolder1 = bitHolder1 << 1;
-      bitcnt1++;
-  }
-  else {
-      bitHolder2 = bitHolder2 << 1;
-      bitcnt2++;
-  }
+    bitCount++;
+    flagDone = 0;
     
-  weigand_counter = WEIGAND_WAIT_TIME;  
-  
+    if(bitCount < 23) {
+        bitHolder1 = bitHolder1 << 1;
+        bitcnt1++;
+    }
+    else {
+        bitHolder2 = bitHolder2 << 1;
+        bitcnt2++;
+    }
+      
+    weigand_counter = WEIGAND_WAIT_TIME;  
+ }
 }
 
 // interrupt that happens when INT1 goes low (1 bit)
 void ISR_INT1()
 {
-//  Serial.print("1");
-  databits[bitCount] = 1;
-  bitCount++;
-  flagDone = 0;
-  
-   if(bitCount < 23) {
-      bitHolder1 = bitHolder1 << 1;
-      bitHolder1 |= 1;
-      bitcnt1++;
-   }
-   else {
-     bitHolder2 = bitHolder2 << 1;
-     bitHolder2 |= 1;
-      bitcnt2++;
-   }
-  
-  weigand_counter = WEIGAND_WAIT_TIME;  
+  if(!isWriting){
+  //  Serial.print("1");
+    databits[bitCount] = 1;
+    bitCount++;
+    flagDone = 0;
+    
+     if(bitCount < 23) {
+        bitHolder1 = bitHolder1 << 1;
+        bitHolder1 |= 1;
+        bitcnt1++;
+     }
+     else {
+       bitHolder2 = bitHolder2 << 1;
+       bitHolder2 |= 1;
+        bitcnt2++;
+     }
+    
+    weigand_counter = WEIGAND_WAIT_TIME;  
+  }
 }
 
 String getContentType(String filename){
@@ -199,31 +205,22 @@ void handleView() {
 }
 
 void setupForRFIDRead(){
-//  digitalWrite(DATA0, LOW);
-//  digitalWrite(DATA1, LOW);
   
-  pinMode(DATA0, INPUT_PULLUP);     // DATA0 (INT0)
-  pinMode(DATA1, INPUT_PULLUP);     // DATA1 (INT1)
-
-  delay(500);
-  // binds the ISR functions to the falling edge of INTO and INT1
-  attachInterrupt(digitalPinToInterrupt(DATA0), ISR_INT0, FALLING);  
-  attachInterrupt(digitalPinToInterrupt(DATA1), ISR_INT1, FALLING);
+  pinMode(DATA0_IN, INPUT_PULLUP);     
+  pinMode(DATA1_IN, INPUT_PULLUP);   
+  delay(500);  
+  attachInterrupt(digitalPinToInterrupt(DATA0_IN), ISR_INT0, FALLING);  
+  attachInterrupt(digitalPinToInterrupt(DATA1_IN), ISR_INT1, FALLING);
   Serial.println("Ready to read...");
 }
 
 
 void setupForRFIDWrite(){
-  pinMode(DATA0, OUTPUT);     // DATA0 (INT0)
-  pinMode(DATA1, OUTPUT);     // DATA1 (INT1)
-  
-  digitalWrite(DATA0, HIGH);
-  digitalWrite(DATA1, HIGH);
-
+  pinMode(DATA0_OUT, OUTPUT);     
+  pinMode(DATA1_OUT, OUTPUT);    
+  digitalWrite(DATA0_OUT, HIGH);
+  digitalWrite(DATA1_OUT, HIGH);
   delay(500);
-  // Turn the the Int while we write
-  detachInterrupt(digitalPinToInterrupt(DATA0));  
-  detachInterrupt(digitalPinToInterrupt(DATA1));
   Serial.println("Ready to write...");
 }
 
@@ -231,6 +228,7 @@ void setup() {
 
   Serial.begin(115200);
   setupForRFIDRead();
+  setupForRFIDWrite();
   
   Serial.println();
   Serial.print("Chip ID: 0x");
@@ -284,18 +282,21 @@ void loop() {
   
   // if we have bits and we the weigand counter went out
   if (bitCount > 0 && flagDone) {
-    Serial.print("Bitcount 1 = ");
-    Serial.println(bitcnt1);
-    Serial.print("Bitcount 2 = ");
-    Serial.println(bitcnt2);
+//    Serial.print("Bitcount 1 = ");
+//    Serial.println(bitcnt1);
+//    Serial.print("Bitcount 2 = ");
+//    Serial.println(bitcnt2);
     
     unsigned char i;
+
+    //Write bits to the wire first thing in order to reduce delay
+    sendBadgeBits(bitHolder1,bitHolder2,bitcnt1,bitcnt2 );
     
     getCardValues();
     getCardNumAndSiteCode();
        
     printBits();
-    writeData();
+    writeDataToFS();
 
      // cleanup and get ready for the next card
      bitCount = 0; facilityCode = 0; cardCode = 0;
@@ -666,6 +667,7 @@ void getCardValues() {
  * Used to write the stored badge bits to the wire 
  */
 void sendBadgeBits(unsigned long bits1,unsigned long bits2, int bCnt1, int bCnt2){
+  isWriting = true;
   setupForRFIDWrite();
   startTime = ESP.getCycleCount(); 
   unsigned long test = 0;
@@ -756,11 +758,11 @@ void sendBadgeBits(unsigned long bits1,unsigned long bits2, int bCnt1, int bCnt2
  * to provide a 1 millisecond pause. 
  */
   for(int i=bitCountToWrite-1; i>=0; i--){
-    digitalWrite((isAOne[i] ?DATA1:DATA0), LOW);
+    digitalWrite((isAOne[i] ?DATA1_OUT:DATA0_OUT), LOW);
     for(long a=0;a<SHORT_TIME;a++){
        ESP.getCycleCount();
     }
-    digitalWrite((isAOne[i]?DATA1:DATA0), HIGH);
+    digitalWrite((isAOne[i]?DATA1_OUT:DATA0_OUT), HIGH);
     shortTime[i] = ESP.getCycleCount();
     
     for(long a=0;a<LONG_TIME;a++){
@@ -772,7 +774,8 @@ void sendBadgeBits(unsigned long bits1,unsigned long bits2, int bCnt1, int bCnt2
 
   endTime = ESP.getCycleCount();  
   Serial.println("");
-  setupForRFIDRead();
+ 
+  isWriting = false;
 }
 
 /**
@@ -805,8 +808,6 @@ void printTimes(){
       Serial.println("]");
       Serial.print("pulse = ");
       Serial.println( (shortTime[b]-longTime[b+1]) );
-//      Serial.print("instruction time = ");
-//      Serial.println( (instructionTime[b]-shortTime[b]) );
       Serial.print("delay = ");
       Serial.println( (longTime[b]-shortTime[b]) );
       Serial.print("total loop time = ");
@@ -820,7 +821,7 @@ void printTimes(){
 }
 
 
-void writeData(){
+void writeDataToFS(){
   
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
