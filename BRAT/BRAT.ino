@@ -52,8 +52,8 @@ volatile unsigned long cardChunk1 = 0;
 volatile unsigned long cardChunk2 = 0;
 
 
-#define DATA0_IN 4
-#define DATA1_IN 0
+#define DATA0_IN 5
+#define DATA1_IN 4
 #define DATA0_OUT 14
 #define DATA1_OUT 12
 

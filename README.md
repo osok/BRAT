@@ -41,8 +41,26 @@ port conflict.  So to fix that I had to read in on one set of GPIO Pins and writ
 the ESP is only capable of 3.3V Logic levels, so a converted had to be used to get the signal to the correct
 levels.
 
-As of 2/17/17 I still need to design the circuit which allows the device to be implanted inline with the 
-badge reader.  Once I have a circuit that works on a locally created board, I'll design a board for faberication
-and send it off to OSKPark.  I'll be sure to post the eagle designs here as well. 
+I spents some time this weekend working on circuits that would support the use of the ESP8266-12e directly.  
+1 out of 12 units I had were good.  So I decided that the circuit would use the nodmcu v0.9 directly.  That
+is easy to program and only required power regulation from 18V to 5V, it took care of the 3.3 volts.  The board
+in the eagle folder is yet to be tested.  As of 2/20/17 it was ordered from OSHPark.  It'll take a few weeks for 
+the board to arrive.
 
+I used some quick release connectors which can be ordered at: https://www.pololu.com/product/2427.
+The nodemcu can be orcered from ebay or amazon: https://www.amazon.com/Industry-Park-NodeMcu-Internet-Development/dp/B01MG1LEU2/
+There are 2 Electrolytic Capacitors of 10 uF and at least 25V, I'll be using 50V. I have these as part of a larger kit.
+The voltage regulator is a LM7805.  I picked up about 20 of them from eBay.
+The level converter can be found on amazon: https://www.amazon.com/gp/product/B0148BLZGE/
+
+
+These are the components that I was able to fritz together that worked.  So I'm confident that the board will work.
+The board file (BRAT.brd) can be uploaded to www.oshpark.com.  There is a minimum order of 3 boards.  the price comes to about $22.
+
+So the cost individual cost is ~$24, depends on quantity and shipping.
+NodeMCU $9
+Capacitors $1
+Level Converter $2
+Connectors $4
+Board $8
 
