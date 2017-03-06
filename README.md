@@ -74,3 +74,6 @@ Front:
 
 Back
 ![](photos/Resized_bottom.jpeg)
+
+Eagle Cad Schematic Screen shot:
+![](photos/schematic.png)
