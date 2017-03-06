@@ -44,7 +44,7 @@ I recieved the board from OSHPark today, and solder the components together.  I 
 Front:
 ![](photos/Resized_top.jpeg)
 
-Back
+Back:
 ![](photos/Resized_bottom.jpeg)
 
 Eagle Cad Schematic Screen shot:
