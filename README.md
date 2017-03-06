@@ -64,3 +64,13 @@ So the cost individual cost is ~$24, depends on quantity and shipping.
 * Connectors $4
 * Board $8
 
+I recieved the board from OSHPark today, and solder the components together.  I have the firmware loaded.  
+I'm just waiting for a new tastic board, since I overloaded the ones I had with a design of the board (self fabricated)
+that used smd.  I let the magic smoke out of something that inadvertantly fried a tastic board.  I went with this design
+because represents exactly what I had been fritizing, and I didn't have to rely on faulty ESP boards.
+
+Front:
+![](photos/Resized_top.jpeg)
+
+Back
+![](photos/Resized_bottom.jpeg)
