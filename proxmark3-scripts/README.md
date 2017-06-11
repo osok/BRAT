@@ -1,0 +1,1 @@
+Place the write_hid.lua in your proxmark3/client/scripts folder

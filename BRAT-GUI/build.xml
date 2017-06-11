@@ -1,0 +1,27 @@
+<?xml version="1.0" ?> 
+<project name="BRAT-GUI" basedir="." default="jar">
+    <property name="source.dir"     value="src"/>
+    <property name="class.dir"      value="bin"/>
+    <property name="jar.dir"        value="dist"/>
+    <property name="main-class"     value="com.caughey.osok.brat.gui.BRATFrame"/>
+
+
+    <target name="clean" description="delete old files">
+        <delete dir="${class.dir}"/>
+        <delete dir="${jar.dir}"/>
+    </target>
+
+ 
+    <target name="jar" >
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${class.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>  
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${jar.dir}/${ant.project.name}.jar" fork="true"/>
+    </target>
+</project>
