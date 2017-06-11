@@ -50,8 +50,7 @@ So the cost individual cost is ~$24, depends on quantity and shipping.
 # Where to buy
 * I used some quick release connectors which can be ordered at: 
 https://www.pololu.com/product/2427.
-* The node mcu can be ordered from eBay or amazon: https://www.amazon.com/Industry-Park-
-NodeMcu-Internet-Development/dp/B01MG1LEU2/
+* The node mcu can be ordered from eBay or amazon: https://www.amazon.com/Industry-Park-NodeMcu-Internet-Development/dp/B01MG1LEU2/
 * There are 2 Electrolytic Capacitors of 10 uF and at least 25V, I'll be using 50V. I have these as part of a 
 larger kit.
 * The voltage regulator is a LM7805.  I picked up about 20 of them from eBay.
