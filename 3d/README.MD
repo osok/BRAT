@@ -1,1 +1,6 @@
-Mounting Clamps for the BRAT, Tastic control board and the LCD Screen.
+
+I used these to construct the demo board.
+Mounting Clamps for 
+* the BRAT
+* Tastic control board 
+* LCD Screen
