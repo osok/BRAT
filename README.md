@@ -11,7 +11,10 @@ the reader.
 
 The data stored is
 
-Card Hex	Facility Code	Card Number	Raw Bits
+* Card Hex	
+* Facility Code	
+* Card Number	
+* Raw Bits
 
 The Card Hex is a URL link to replay the card to the reader.
 
