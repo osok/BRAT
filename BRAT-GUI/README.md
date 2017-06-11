@@ -12,7 +12,7 @@ It's easiest to connect the RPi to a keyboard and mouse, while doing the set up.
 
 1. Install Ubunutu Mate : Follow instructions here https://ubuntu-mate.org/
 2. Update the Ubuntu
-[code]
-sudo apt-get update
-sudo apt-get upgrade
-[/code]
+
+`sudo apt-get update
+
+sudo apt-get upgrade`
