@@ -4,3 +4,5 @@ This box works great with
 * Proxmark3 Easy ($88): https://www.ebay.com/i/262955750782?chn=ps&dispItem=1
 * If you do not have a 3D printer all three parts costs about $80 - $120 on 3D hubs : https://www.3dhubs.com/ 
 * Battery Pack ($39) : http://www.bestbuy.com/site/mycharge-razormax-portable-power-bank-black/6330174.p?skuId=6330174 :  I took it out of the case.  Using this style battery means longer life and easy to recharge.
+
+See [RPI-GUI](https://github.com/osok/BRAT/tree/master/BRAT-GUI) for instructions on loading the software including the Ubuntu Mate.
