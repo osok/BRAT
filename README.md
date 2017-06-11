@@ -8,9 +8,13 @@ The Device has a built in Access Point and web server.  You can connect to the A
 device such as a smart phone or computer.  You can interact with the device through its web page.  The 
 default address is http://192.168.4.1/view. This provides list of previous cards that have been used on 
 the reader.
+
 The data stored is
+
 Card Hex	Facility Code	Card Number	Raw Bits
+
 The Card Hex is a URL link to replay the card to the reader.
+
 Optionally you can connect the BRAT-GUI on the BRAT-RPi device, which is designed to allow printing of 
 the card with a proxmark3.
 
