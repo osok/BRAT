@@ -32,6 +32,7 @@ I used Eagle CAD to design the circuit and board.
 # Board Fabrication
 When I fabricate my final boards I use [OSH Park](http://www.oshpark.com).  You will have to purchase 
 three boards minimum for a total cost of $21.85 USD.
+
 Front:
 ![](photos/Resized_top.jpeg)
 
