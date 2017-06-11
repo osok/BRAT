@@ -61,5 +61,6 @@ There are sections of the code that were orginally develed by Bishop Fox for the
 https://www.bishopfox.com/resources/tools/rfid-hacking/attack-tools/).  The BRAT works great in the 
 Tastic RFID Thief.  This adds the capability for the user to monitor the badges acquired and for others to 
 use the BRAT-GUI and BRAT-RPi to write badges as the attacker collects them.
-#Speaking engagements
+
+# Speaking engagements
 B-Sides Las Vegas 2017: I submitted an abstract and I have the talk ready.  We’ll see if they accept it.
