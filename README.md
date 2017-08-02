@@ -45,10 +45,10 @@ When I fabricate my final boards I use [OSH Park](http://www.oshpark.com).  You 
 three boards minimum for a total cost of $21.85 USD.
 
 Front:
-![](photos/Resized_top.jpeg)
+![](photos/Resized_top.jpeg=250px)
 
 Back:
-![](photos/Resized_bottom.jpeg)
+![](photos/Resized_bottom.jpeg=250px)
 
 # Parts list
 So the cost individual cost is ~$24, depends on quantity and shipping.
