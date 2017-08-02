@@ -1,3 +1,5 @@
+# Description
+
 This box works great with  
 * RPI 3 : https://www.adafruit.com/product/3055
 * Pi foundation Display 7" Touch screen ($79): https://www.adafruit.com/product/2718
@@ -6,3 +8,7 @@ This box works great with
 * Battery Pack ($39) : http://www.bestbuy.com/site/mycharge-razormax-portable-power-bank-black/6330174.p?skuId=6330174 :  I took it out of the case.  Using this style battery means longer life and easy to recharge.
 
 See [RPI-GUI](https://github.com/osok/BRAT/tree/master/BRAT-GUI) for instructions on loading the software including the Ubuntu Mate.
+
+# Assembly
+
+TODO : Create video (the plan is to have it up by the week of 8/10/17)
