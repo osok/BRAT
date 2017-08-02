@@ -37,18 +37,18 @@ There are two 10 uF capacitors to smooth the power out.
 The main board must be fabricated, see below for more information on that. 
 
 # Schematics
-I used Eagle CAD to design the circuit and board.
-![](photos/schematic.png)
+I used Eagle CAD to design the circuit and board.<br>
+
+<img src="photos/schematic.png" width="450" /> 
 
 # Board Fabrication
 When I fabricate my final boards I use [OSH Park](http://www.oshpark.com).  You will have to purchase 
 three boards minimum for a total cost of $21.85 USD.
 
-Front:
-<img src="photos/Resized_top.jpeg" width="250" /> 
+Front:<br>
 
-Back:
-<img src="photos/Resized_bottom.jpeg" width="250" /> 
+Back:<br>
+<img src="photos/Resized_bottom.jpeg" width="350" /> 
 
 
 # Parts list
