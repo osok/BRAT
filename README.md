@@ -1,3 +1,16 @@
+Table of Contents
+
+- [Description](#description)
+- [Key components](#key-components)
+- [Schematics](#schematics)
+- [Board Fabrication](#board-fabrication)
+- [Parts list](#parts-list)
+- [How to build the Board](#how-to-build-the-board)
+- [Where to buy](#where-to-buy)
+- [References](#references)
+- [BRAT-GUI](#brat-gui)
+
+
 # Description
 BRAT or Badge Reader Active Tap, allows you to either install this implant into an HID Prox or iClass 
 Reader inline between the reader and server.  It captures the bits from the Data0 and Data1 line and 
