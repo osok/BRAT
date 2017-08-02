@@ -25,7 +25,7 @@ sudo apt-get install openjdk-8-jdk
 2. Download run.sh from the dist directory and place it in the same directory as the BRAT-GUI.jar
 3. change the permissions on the run.sh file
 ```
-chmod 700 run.me
+chmod 700 run.sh
 ```
 4. Download the lua script write_hid.lua and place it in the proxmark3/client/scripts directory : https://github.com/osok/BRAT/tree/master/proxmark3-scripts
 
