@@ -101,13 +101,13 @@ https://github.com/osok/BRAT/tree/master/BRAT-RPi-3D
 
 # How to use
 
-Once the BRAT is installed and powered on, you can connect to the AP.  The SSID can be modified before the source is compiled and loaded.  the password is also confgirable.  So based on what SSI / Password you used will determine how to connect.
+Once the BRAT is installed and powered on, you can connect to the AP.  The SSID can be modified before the source is compiled and loaded.  The password is also confgurable.  Based on what SSID / Password you used when compiling the source, will determine how to connect.
 
 Once your mobile device is connected, you can use a browser to visit: http://192.168.4.2/view
 
 You'll see the hex code with a link, Facility Code, Badge ID, and the raw bits.
 
-Clickinf the link with the hex code for a badge will replay the bits on the wire.  
+Clicking the link with the hex code for a badge will replay the bits on the wire.  
 So if this is installed as an implant you can replay cards that have been used since the implant was installed.
 
 If the the device is being used witht he Tastic, use the BRAT-GUI to grab the card data from the BRAT and create clones in realtime.
