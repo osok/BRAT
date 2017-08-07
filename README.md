@@ -74,8 +74,7 @@ So the cost individual cost is ~$24, depends on quantity and shipping.
 
 # How to build the Board
 
-TODO : add link to video for how to solder the components tothe board.
-(the plan is to have it up by the week of 8/10/17)
+https://youtu.be/rFhIB0w98co
 
 # Where to buy
 * I used some quick release connectors which can be ordered at: 
