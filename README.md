@@ -9,6 +9,7 @@ Table of Contents
 - [Where to buy](#where-to-buy)
 - [References](#references)
 - [BRAT-GUI](#brat-gui)
+- [How to use](#How-to-use)
 
 
 # Description
