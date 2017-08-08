@@ -13,9 +13,8 @@
  * When I orginally set out to bypass the HID Prox devices, I did a lot of research        
  * I came along the Tastic RFID Reader by Bishop Fox, 
  * https://www.bishopfox.com/resources/tools/rfid-hacking/attack-tools/
- * as well as a Def Con Talk barse Lares. After building a Tastic Reader I got the 
- * idea that I could some how wirelessly send the card data to someon that could 
- * then wirte a card for immediate use.
+ * After building a Tastic Reader I got the   idea that I could some how wirelessly 
+ * send the card data to someon that could  then wirte a card for immediate use.
  * 
  * The portions of this code that read the signal from the line 
  * and decode the bits into FC and Card Num are the same
