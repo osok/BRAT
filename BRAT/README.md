@@ -13,7 +13,7 @@ Youtube video: https://youtu.be/guUEqy8e27w
 
 Notes from the video
  
-> You will need to clode the GitHub Repo.
+> You will need to code the GitHub Repo.
 > https://github.com/osok/BRAT
 > 
 > In order to compile this You will need Ardunio IDE Installed.
