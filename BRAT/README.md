@@ -40,3 +40,8 @@ Notes from the video
 > Then save and upload.  It will compile first.
 > Then upload.
 > Then success!!!
+
+# License
+
+Creative Commons Attribution 3.0 United States
+https://creativecommons.org/licenses/by/3.0/us/

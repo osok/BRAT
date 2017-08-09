@@ -112,3 +112,8 @@ So if this is installed as an implant you can replay cards that have been used s
 
 If the the device is being used witht he Tastic, use the BRAT-GUI to grab the card data from the BRAT and create clones in realtime.
 
+
+# License
+
+Creative Commons Attribution 3.0 United States
+https://creativecommons.org/licenses/by/3.0/us/

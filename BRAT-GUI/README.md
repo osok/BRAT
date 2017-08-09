@@ -48,3 +48,9 @@ sudo ./promark3 /dev/ttyACM0
 
 
 That's it.
+
+
+# License
+
+Creative Commons Attribution 3.0 United States
+https://creativecommons.org/licenses/by/3.0/us/
