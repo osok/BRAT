@@ -73,6 +73,12 @@ So the cost individual cost is ~$24, depends on quantity and shipping.
 * Connectors $4
 * Board $8
 
+There are a number of different Logic converters out there.  Some simply move where the V_high/GND and V_low/GND are located, which makes them not compatable with this board, and others simply dont respond as they should.  Below are some examples:
+
+<img src="photos/logic-shifters.jpg" width="350" /> 
+
+I have found that even if you pay close attention to the ads on amazon and eBay, an only order the ones witht he double arrow on the back, some times they still send you other boards.
+
 # How to build the Board
 
 https://youtu.be/rFhIB0w98co

@@ -11,7 +11,7 @@ See [RPI-GUI](https://github.com/osok/BRAT/tree/master/BRAT-GUI) for instruction
 
 # Assembly
 
-TODO : Create video (the plan is to have it up by the week of 8/10/17)
+TODO : Create video 
 
 
 # License
