@@ -79,6 +79,8 @@ There are a number of different Logic converters out there.  Some simply move wh
 
 I have found that even if you pay close attention to the ads on amazon and eBay, an only order the ones witht he double arrow on the back, some times they still send you other boards.
 
+If you are only going to use this witht he Tastic, then you can forgo the Logic Level Converter.  Looking att he back side of the BRAT card solder the data out pins from the 3.3v side to straight across to the 5V side.  Don't solder the top pin one is 3V3 nd the other is 5V. That would be bad.  But 4th pin down and the bottom (6th Pin down) on the left solder a wire to the coresponding pin on the other side.   Left 4th pin to right 4th pin, and Left 6th pin to right 6th pin.   
+
 # How to build the Board
 
 https://youtu.be/rFhIB0w98co
